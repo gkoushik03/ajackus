@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #chat-history {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #fff;
+        }
+        .message {
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 75%;
+        }
+        .user {
+            background-color: #cce5ff;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot {
+            background-color: #d4edda;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 2px solid #ccc;
+            background: white;
+        }
+        #query {
+            flex: 1;
+            height: 50px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            width: 100px;
+            margin-left: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        async function sendQuery() {
+            const userQuery = document.getElementById("query").value;
+            if (!userQuery.trim()) return;
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: userQuery })
+            });
+            const data = await response.json();
+
+            const chatHistory = document.getElementById("chat-history");
+
+            // Append user message
+            const userMessage = document.createElement("div");
+            userMessage.className = "message user";
+            userMessage.innerText = "You: " + userQuery;
+            chatHistory.appendChild(userMessage);
+
+            // Append bot response
+            const botMessage = document.createElement("div");
+            botMessage.className = "message bot";
+            botMessage.innerText = "Bot: " + data.response;
+            chatHistory.appendChild(botMessage);
+
+            // Clear text box
+            document.getElementById("query").value = "";
+
+            // Auto-scroll to the latest message
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    </script>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-history"></div>
+        <div class="input-area">
+            <textarea id="query" placeholder="Enter your query..."></textarea>
+            <button onclick="sendQuery()">Send</button>
+        </div>
+    </div>
+</body>
+</html>
