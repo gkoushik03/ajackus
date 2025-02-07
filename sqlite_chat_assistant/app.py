@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Function to get valid departments from the database
 def get_valid_departments():
-    conn = sqlite3.connect("chatbot.db")
+    conn = sqlite3.connect("sqlite_chat_assistant/chatbot.db")  # Fixed path
     cursor = conn.cursor()
     cursor.execute("SELECT Name FROM Departments")
     departments = [row[0] for row in cursor.fetchall()]
@@ -14,7 +14,7 @@ def get_valid_departments():
 
 # Function to fetch employees in a specific department
 def get_employees_by_department(department):
-    conn = sqlite3.connect("chatbot.db")
+    conn = sqlite3.connect("sqlite_chat_assistant/chatbot.db")  # Fixed path
     cursor = conn.cursor()
     cursor.execute("SELECT Name, Salary, Hire_Date FROM Employees WHERE Department = ?", (department,))
     employees = cursor.fetchall()
@@ -23,7 +23,7 @@ def get_employees_by_department(department):
 
 # Function to fetch the manager of a department
 def get_manager_by_department(department):
-    conn = sqlite3.connect("chatbot.db")
+    conn = sqlite3.connect("sqlite_chat_assistant/chatbot.db")  # Fixed path
     cursor = conn.cursor()
     cursor.execute("SELECT Manager FROM Departments WHERE Name = ?", (department,))
     manager = cursor.fetchone()
@@ -32,7 +32,7 @@ def get_manager_by_department(department):
 
 # Function to fetch the manager of an employee
 def get_manager_by_employee(employee_name):
-    conn = sqlite3.connect("chatbot.db")
+    conn = sqlite3.connect("sqlite_chat_assistant/chatbot.db")  # Fixed path
     cursor = conn.cursor()
     cursor.execute("""
         SELECT d.Manager FROM Employees e
