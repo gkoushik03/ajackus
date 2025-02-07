@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import os
 import sqlite3
 
 app = Flask(__name__)
@@ -83,4 +84,5 @@ def chat():
     return jsonify({"response": response})  # Return response to UI
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Get the PORT from environment
+    app.run(host="0.0.0.0", port=port, debug=False)  # B
